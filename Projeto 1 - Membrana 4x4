@@ -1,0 +1,37 @@
+/*===========================================================================
+Código: Flavio Babos – Parceiro Usina Info
+Projeto Membrana/Teclado 4x4 - Guia definitivo de uso
+=============================================================================*/
+
+#include <Keypad.h>
+
+const byte linhas = 4; // 4 Linhas
+const byte colunas = 4; // E 4 Colunas
+
+char membrana[linhas][colunas] = {
+  {'1','2','3','A'},
+  {'4','5','6','B'},
+  {'7','8','9','C'},
+  {'*','0','#','D'}
+};
+
+byte pinosLinha[linhas] = {9, 8, 7, 6}; // Pinos do Arduino que correspondem às linhas 
+byte pinosColuna[colunas] = {5, 4, 3, 2}; // Pinos do Arduino que correspondem às colunas 
+
+// Criando um objeto para o seu teclado
+Keypad keypad = Keypad( makeKeymap(membrana), pinosLinha, pinosColuna, linhas, colunas );
+
+void setup(){
+  Serial.begin(9600);
+}
+  
+void loop(){
+  char botao = keypad.getKey(); // Lendo os botões 
+  
+  // Printa no serial monitor quando for pressionado
+  if (botao){
+    Serial.print("O botão ");
+    Serial.print(botao);
+    Serial.println(" foi pressionado");
+  }
+}
