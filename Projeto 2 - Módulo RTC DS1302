@@ -1,0 +1,73 @@
+/*===========================================================================
+Código: Flavio Babos – Parceiro Usina Info
+Projeto exibição de Data e Hora com o Módulo RTC DS1302 
+=============================================================================*/
+
+#include <ThreeWire.h>  
+#include <RtcDS1302.h>
+
+ThreeWire myWire(6,7,8); // DAT, CLK, RST
+RtcDS1302<ThreeWire> Rtc(myWire);
+
+void setup () {
+    Serial.begin(57600);
+    Serial.print("Compilado: ");
+    Serial.print(__DATE__);
+    Serial.println(__TIME__);
+
+    Rtc.Begin();
+    RtcDateTime compilado = RtcDateTime(__DATE__, __TIME__);
+    PrintarData(compilado);
+    Serial.println();
+
+    if (!Rtc.IsDateTimeValid()) {
+        // Causas comuns: 1) primeira vez que você executou e o dispositivo ainda não estava funcionando 
+        // 2) a bateria do dispositivo está fraca ou mesmo ausente
+        Serial.println("RTC perdeu a confiança no DateTime!");
+        Rtc.SetDateTime(compilado);
+    }
+
+    if (Rtc.GetIsWriteProtected()) {
+        Serial.println("RTC estava protegido contra gravação, permitindo a gravação agora");
+        Rtc.SetIsWriteProtected(false);
+    }
+
+    if (!Rtc.GetIsRunning()) {
+        Serial.println("O RTC não estava funcionando ativamente, começando agora");
+        Rtc.SetIsRunning(true);
+    }
+
+    RtcDateTime now = Rtc.GetDateTime();
+    if (now < compilado) {
+        Serial.println("O RTC é mais antigo que o tempo de compilação! (Atualizando DateTime)");
+        Rtc.SetDateTime(compilado);
+    }
+    else if (now > compilado)
+        Serial.println("RTC é mais recente que o tempo de compilação. (isso é esperado)");
+    else
+        Serial.println("RTC é o mesmo que tempo de compilação! (não é esperado, mas está tudo bem)");
+}
+
+void loop () {
+    RtcDateTime now = Rtc.GetDateTime();
+    PrintarData(now);
+    if (!now.IsValid()) {
+        // Causas comuns: 1) a bateria do dispositivo está fraca ou até mesmo ausente e a linha 
+        // de alimentação foi desconectada
+        Serial.println("RTC perdeu a confiança no DateTime!");
+    }
+    delay(1000);
+}
+
+#define contagem(a) (sizeof(a) / sizeof(a[0]))
+
+void PrintarData(const RtcDateTime& dt) {
+    char stringData[20];
+    snprintf_P(stringData, 
+            contagem(stringData),
+            PSTR("%02u/%02u/%04u %02u:%02u:%02u"),
+            dt.Month(), dt.Day(), dt.Year(),
+            dt.Hour(), dt.Minute(), dt.Second() );
+    Serial.print(stringData);
+    Serial.println();
+}
