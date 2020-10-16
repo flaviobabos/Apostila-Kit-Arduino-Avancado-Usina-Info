@@ -54,7 +54,7 @@ void loop()
   digitalWrite(DHT11,LOW);
   delay(20);
   digitalWrite(DHT11,HIGH);
-  pinMode(DHT11,INPUT_PULLUP);//by default it will become high due to internal pull up
+  pinMode(DHT11,INPUT_PULLUP);//por padrão, ficará HIGH devido ao pull interno
  // delayMicroseconds(40);
 
   
