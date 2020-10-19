@@ -1,0 +1,31 @@
+/*===========================================================================
+Código: Flavio Babos – Parceiro Usina Info
+Projeto Detector de Fumaça MQ2 
+=============================================================================*/
+
+#define MQ2pin (0)
+
+float valorSensor;  // Variável que armazena o valor do sensor 
+
+void setup()
+{
+  Serial.begin(9600); // Determina a porta serial em 9600 bps 
+  Serial.println("Iniciando sensor de Gas MQ2!");
+  delay(20000); // Permite a inicialização do Detector
+}
+
+void loop()
+{
+  valorSensor = analogRead(MQ2pin); // Lendo a entrada analógica do pino 0
+  
+  Serial.print("Valor do Sensor: ");
+  Serial.print(valorSensor);
+  
+  if(valorSensor > 300)
+  {
+    Serial.print(" | Gás detectado!");
+  }
+  
+  Serial.println("");
+  delay(2000); // Espera por 2 segundos para a próxima medição
+}
