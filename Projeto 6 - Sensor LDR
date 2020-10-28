@@ -1,0 +1,50 @@
+/*===========================================================================
+Código: Flavio Babos – Parceiro Usina Info
+Projeto Sensor LDR - Acionamento de diversos LEDs de acordo com a luminosidade
+=============================================================================*/
+
+// Defina todas as variáveis utilizadas e seus respectivos pinos
+int LEDverde = 2; 
+int LEDamarelo = 3;
+int LEDvermelho = 4;
+int sensorLDR = A0;
+int valorA0 = 0;
+
+void setup() {
+
+  // Defina os LEDs como saídas
+  pinMode(LEDverde, OUTPUT);
+  pinMode(LEDamarelo,OUTPUT);
+  pinMode(LEDvermelho,OUTPUT);
+
+  // Inicialize o monitor serial a taxa de 9600 bps
+  Serial.begin(9600);
+}
+
+void loop(){
+  
+  // Variável recebe o valor analógico lido do sensor
+  valorA0 = analogRead(sensorLDR);
+
+  // Printa no monitor Serial
+  Serial.print("Valor lido: ");
+  Serial.println(valorA0);
+
+  if(valorA0 < 50){  // Se estiver escuro         
+    digitalWrite(LEDvermelho, HIGH);
+  }
+  else if(valorA0 >= 50 && valorA0 <= 150){  // Nem tão escuro nem tão claro 
+    digitalWrite(LEDamarelo, HIGH);
+  }
+  else{
+    digitalWrite(LEDverde, HIGH);  // Muito claro
+  }
+
+  // Atraso de 2ms para a leitura ser processada
+  delay(200);
+
+  // Desliga-se todos os LEDs
+  digitalWrite(LEDverde, LOW);
+  digitalWrite(LEDamarelo, LOW);
+  digitalWrite(LEDvermelho, LOW);
+}
