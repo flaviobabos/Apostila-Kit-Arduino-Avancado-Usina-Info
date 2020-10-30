@@ -5,7 +5,7 @@ Projeto Sensor de Estacionamento
 
 // Pinos usados
 #define LEDverde 2
-#define LEDamarelo 3
+#define LEDazul 3
 #define LEDvermelho 4
 #define TRIGGER 5
 #define ECHO 6
@@ -24,7 +24,7 @@ void setup() {
 
   // Modo de entrada / saída do pino
   pinMode(LEDverde, OUTPUT);
-  pinMode(LEDamarelo, OUTPUT);
+  pinMode(LEDazul, OUTPUT);
   pinMode(LEDvermelho, OUTPUT);
   pinMode(ECHO, INPUT);
   pinMode(TRIGGER, OUTPUT);
@@ -60,7 +60,7 @@ void loop() {
 void desligarLEDs()
 {
   digitalWrite(LEDverde, LOW);
-  digitalWrite(LEDamarelo, LOW);
+  digitalWrite(LEDazul, LOW);
   digitalWrite(LEDvermelho, LOW);
 }
 
@@ -78,8 +78,8 @@ void alertas (float distancia){
   // Se a distância estiver entre o limite2 e o limite3
   else if (distancia < limite2 && distancia >= limite3){
 
-    // Ligue o LED amarelo
-    digitalWrite(LEDamarelo, HIGH);
+    // Ligue o LED azul
+    digitalWrite(LEDazul, HIGH);
     tone(BUZZER, 2500, 200);
     }
     
